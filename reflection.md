@@ -2,10 +2,17 @@
 
 ## 1. System Design
 
+- User actions:
+1. Edit/Add tasks
+2. See daily generated plan
+3. User enters pet + owner information
+
 **a. Initial design**
 
 - Briefly describe your initial UML design.
 - What classes did you include, and what responsibilities did you assign to each?
+
+Initially this was my design: 
 
 **b. Design changes**
 
