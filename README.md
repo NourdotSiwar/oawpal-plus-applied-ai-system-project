@@ -42,17 +42,18 @@ pip install -r requirements.txt
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
 
-### Smarter Scheduling
+## Features / Smarter Scheduling
 
-PawPal+ now includes several smarter scheduling features:
+- **Chronological Task Sorting:** Automatically orders care tasks by HH:MM time so owners can follow a clear daily timeline.
+- **Schedule Conflict Detection:** Flags overlapping tasks that share the same date and time to prevent care-task collisions.
+- **Task Status Filtering:** Filters tasks by status (`incomplete`, `complete`, `deleted`) so users can focus on what needs attention.
+- **Pet-Specific Task Filtering:** Filters schedule items by pet name to support multi-pet households.
+- **Recurring Task Continuation (Daily/Weekly):** When a recurring task is marked complete, the next occurrence is auto-created using date arithmetic.
+- **Owner-Pet-Task Aggregation:** Supports owner-level planning by collecting tasks across all pets tied to one owner.
+- **Clear UI Scheduling Feedback:** Uses Streamlit success and warning messages to communicate generated schedules and detected conflicts.
 
-- **Sorting and Filtering:** Tasks can be sorted by time and filtered by completion status or by pet name, making it easy to view and manage daily routines.
-- **Recurring Task Automation:** When a daily or weekly task is marked complete, a new instance is automatically created for the next occurrence using accurate date calculations with Python's `timedelta`.
-- **Conflict Detection:** The scheduler detects and warns if two tasks (for the same or different pets) are scheduled at the same time, helping avoid accidental overlaps.
+### Testing PawPal+
 
-These features make the app more efficient and user-friendly for busy pet owners, ensuring that care routines are consistent, conflicts are avoided, and recurring needs are never missed.
-
-### Testing PawPal_+
 The current 7-test suite checks core logic paths including task completion state changes, pet task assignment, chronological sorting, daily recurrence creation on completion, duplicate time conflict detection, empty-scheduler behavior, and non-conflict handling for same times on different dates.
 
 Command to run tests: python -m pytest
@@ -64,3 +65,7 @@ Reason:
 - Passing tests give strong confidence that key behaviors are clear and consistently implemented.
 - The tests cover major happy paths and important edge cases.
 - Readability is high, but not a full 5/5 because it is always possible to test more. As mentioned by Dijkstra, tests only prove presence of bugs, not their absence.
+
+### 📸 Demo
+
+[![PawPal App](pawpal.png)](pawpal.png)

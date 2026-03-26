@@ -1,0 +1,63 @@
+classDiagram
+    Owner "1" --> "0..*" Pet : owns (pet_ids)
+    Pet "1" --> "0..*" Task : tracks (task_ids)
+    Task "0..1" --> "1" Pet : assigned_pet_id
+    Scheduler o-- "0..*" Task : schedules
+    Scheduler ..> Owner : get_owner_tasks(owner, pets)
+    Scheduler ..> Pet : filter_by_pet_name(pets, name)
+
+    class Owner {
+        +int owner_id
+        +str name
+        +str contact_info
+        +List~int~ pet_ids
+        +add_pet(pet_id)
+        +remove_pet(pet_id)
+        +get_pets(pets)
+        +get_all_tasks(pets, tasks)
+        +update_info(**kwargs)
+    }
+
+    class Pet {
+        +int pet_id
+        +str name
+        +str species
+        +str breed
+        +int age
+        +str medical_info
+        +Optional~int~ owner_id
+        +List~int~ task_ids
+        +add_task(task_id)
+        +edit_task(task_id, tasks, **kwargs)
+        +delete_task(task_id)
+        +get_tasks(tasks)
+        +update_info(**kwargs)
+    }
+
+    class Task {
+        +int task_id
+        +str description
+        +str time
+        +str frequency
+        +Optional~str~ date
+        +str status
+        +Optional~int~ assigned_pet_id
+        +mark_complete(tasks_registry=None, auto_recur=True)
+        +edit_task(**kwargs)
+        +delete_task()
+    }
+
+    class Scheduler {
+        +List~Task~ tasks
+        +constraints
+        +plan
+        +detect_conflicts()
+        +filter_by_status(status)
+        +filter_by_pet_name(pets, pet_name)
+        +sort_by_time()
+        +generate_plan()
+        +explain_reasoning()
+        +update_constraints(constraints)
+        +get_plan()
+        +get_owner_tasks(owner, pets)
+    }
