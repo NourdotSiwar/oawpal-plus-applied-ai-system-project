@@ -1,4 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()
+
+from datetime import date as date_today, datetime
 from pawpal_system import Owner, Pet, Task, Scheduler
+from ai_assistant import suggest_tasks, answer_question, generate_weekly_schedule
 import streamlit as st
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
@@ -6,8 +11,24 @@ st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 st.title("🐾 PawPal+")
 
 
+def _fmt_date(date_str: str) -> str:
+    if not date_str or date_str == "N/A":
+        return "N/A"
+    try:
+        return datetime.strptime(date_str, "%Y-%m-%d").strftime("%B %d, %Y")
+    except ValueError:
+        return date_str
+
+
+def _fmt_day_label(day_str: str) -> str:
+    """Convert 'Wednesday 2026-04-22' to 'Wednesday, April 22, 2026'."""
+    parts = day_str.split(" ", 1)
+    if len(parts) == 2:
+        return f"{parts[0]}, {_fmt_date(parts[1])}"
+    return day_str
+
+
 def tasks_to_table_rows(tasks, pets):
-    """Convert Task objects into table-friendly rows for Streamlit."""
     rows = []
     for task in tasks:
         pet_name = "Unassigned"
@@ -18,7 +39,7 @@ def tasks_to_table_rows(tasks, pets):
                 "ID": task.task_id,
                 "Task": task.description,
                 "Pet": pet_name,
-                "Date": task.date or "N/A",
+                "Date": _fmt_date(task.date),
                 "Time": task.time,
                 "Frequency": task.frequency,
                 "Status": task.status,
@@ -26,57 +47,29 @@ def tasks_to_table_rows(tasks, pets):
         )
     return rows
 
-st.markdown(
-    """
-Welcome to the PawPal+ starter app.
 
-This file is intentionally thin. It gives you a working Streamlit app so you can start quickly,
-but **it does not implement the project logic**. Your job is to design the system and build it.
-
-Use this app as your interactive demo once your backend classes/functions exist.
-"""
-)
-
-with st.expander("Scenario", expanded=True):
+with st.expander("About PawPal+", expanded=False):
     st.markdown(
         """
-**PawPal+** is a pet care planning assistant. It helps a pet owner plan care tasks
-for their pet(s) based on constraints like time, priority, and preferences.
-
-You will design and implement the scheduling logic and connect it to this Streamlit UI.
-"""
-    )
-
-with st.expander("What you need to build", expanded=True):
-    st.markdown(
-        """
-At minimum, your system should:
-- Represent pet care tasks (what needs to happen, how long it takes, priority)
-- Represent the pet and the owner (basic info and preferences)
-- Build a plan/schedule for a day that chooses and orders tasks based on constraints
-- Explain the plan (why each task was chosen and when it happens)
+**PawPal+** is an AI-powered pet care planning assistant. It helps pet owners manage daily
+care tasks and uses a RAG-based AI assistant to suggest personalised tasks, answer pet care
+questions, and generate full weekly schedules — all grounded in a curated pet care knowledge base.
 """
     )
 
 st.divider()
 
-st.subheader("Quick Demo Inputs (UI only)")
+# ── Owner ────────────────────────────────────────────────────────────────────
+if "owner" not in st.session_state:
+    st.session_state["owner"] = Owner(owner_id=1, name="Alex", contact_info="alex@email.com")
 
-# Check if 'owner' already exists in session_state
-if 'owner' not in st.session_state:
-    # Create and store the Owner instance if it doesn't exist
-    st.session_state['owner'] = Owner(owner_id=1, name="Alex", contact_info="alex@email.com")
+owner = st.session_state["owner"]
+owner_name = st.text_input("Owner name", value=owner.name)
 
-# Now you can safely use st.session_state['owner'] throughout your app
-owner = st.session_state['owner']
-
-# Owner name input (for demo, not used to recreate owner object)
-owner_name = st.text_input("Owner name", value=st.session_state['owner'].name if 'owner' in st.session_state else "Jordan")
-
-# --- Add Pet Form ---
+# ── Pets ─────────────────────────────────────────────────────────────────────
 st.markdown("### Add a Pet")
-if 'pets' not in st.session_state:
-    st.session_state['pets'] = {}
+if "pets" not in st.session_state:
+    st.session_state["pets"] = {}
 
 with st.form("add_pet_form"):
     pet_name = st.text_input("Pet name", value="Mochi")
@@ -86,8 +79,7 @@ with st.form("add_pet_form"):
     medical_info = st.text_input("Medical info", value="")
     submitted = st.form_submit_button("Add Pet")
     if submitted:
-        # Generate a new pet_id
-        pet_id = max(st.session_state['pets'].keys(), default=100, ) + 1 if st.session_state['pets'] else 101
+        pet_id = (max(st.session_state["pets"].keys()) + 1) if st.session_state["pets"] else 101
         new_pet = Pet(
             pet_id=pet_id,
             name=pet_name,
@@ -95,40 +87,39 @@ with st.form("add_pet_form"):
             breed=breed,
             age=age,
             medical_info=medical_info,
-            owner_id=st.session_state['owner'].owner_id
+            owner_id=owner.owner_id,
         )
-        st.session_state['pets'][pet_id] = new_pet
-        st.session_state['owner'].add_pet(pet_id)
+        st.session_state["pets"][pet_id] = new_pet
+        owner.add_pet(pet_id)
         st.success(f"Added pet: {pet_name}")
 
-# Display pets
-if st.session_state['owner'].pet_ids:
+if owner.pet_ids:
     st.markdown("### Your Pets")
-    pet_table = []
-    for pid in st.session_state['owner'].pet_ids:
-        pet = st.session_state['pets'].get(pid)
-        if pet:
-            pet_table.append({
-                "Name": pet.name,
-                "Species": pet.species,
-                "Breed": pet.breed,
-                "Age": pet.age,
-                "Medical Info": pet.medical_info
-            })
-    st.table(pet_table)
+    st.table(
+        [
+            {
+                "Name": p.name,
+                "Species": p.species,
+                "Breed": p.breed,
+                "Age": p.age,
+                "Medical Info": p.medical_info,
+            }
+            for pid in owner.pet_ids
+            if (p := st.session_state["pets"].get(pid))
+        ]
+    )
 else:
     st.info("No pets yet. Add one above.")
 
+# ── Tasks ─────────────────────────────────────────────────────────────────────
 st.markdown("### Tasks")
-st.caption("Add a few tasks. In your final version, these should feed into your scheduler.")
 
 if "tasks" not in st.session_state:
     st.session_state.tasks = []
-
 if "next_task_id" not in st.session_state:
     st.session_state.next_task_id = 1
 
-# Backward-compatible migration in case older dict tasks are still in session state.
+# Backward-compatible migration for older dict-format tasks
 if st.session_state.tasks and isinstance(st.session_state.tasks[0], dict):
     migrated = []
     for item in st.session_state.tasks:
@@ -147,7 +138,7 @@ if st.session_state.tasks and isinstance(st.session_state.tasks[0], dict):
     st.session_state.tasks = migrated
 
 pet_options = {"Unassigned": None}
-for pid in st.session_state["owner"].pet_ids:
+for pid in owner.pet_ids:
     pet = st.session_state["pets"].get(pid)
     if pet:
         pet_options[f"{pet.name} (ID {pid})"] = pid
@@ -193,7 +184,7 @@ if st.session_state.tasks:
     with filter_col2:
         pet_filter_names = ["all"] + [
             st.session_state["pets"][pid].name
-            for pid in st.session_state["owner"].pet_ids
+            for pid in owner.pet_ids
             if pid in st.session_state["pets"]
         ]
         pet_filter = st.selectbox("Filter by pet", pet_filter_names, index=0)
@@ -202,7 +193,9 @@ if st.session_state.tasks:
     if status_filter != "all":
         filtered_tasks = Scheduler(filtered_tasks).filter_by_status(status_filter)
     if pet_filter != "all":
-        filtered_tasks = Scheduler(filtered_tasks).filter_by_pet_name(st.session_state["pets"], pet_filter)
+        filtered_tasks = Scheduler(filtered_tasks).filter_by_pet_name(
+            st.session_state["pets"], pet_filter
+        )
 
     st.table(tasks_to_table_rows(filtered_tasks, st.session_state["pets"]))
 else:
@@ -210,26 +203,169 @@ else:
 
 st.divider()
 
+# ── Build Schedule ────────────────────────────────────────────────────────────
 st.subheader("Build Schedule")
-st.caption("This button should call your scheduling logic once you implement it.")
 
 if st.button("Generate schedule"):
     if not st.session_state.tasks:
-        st.warning("No tasks available. Add at least one task to generate a schedule.")
+        st.warning("No tasks available. Add at least one task first.")
+        st.session_state["last_schedule"] = None
     else:
         scheduler = Scheduler(st.session_state.tasks)
-        sorted_tasks = scheduler.sort_by_time()
-        conflicts = scheduler.detect_conflicts()
+        st.session_state["last_schedule"] = {
+            "tasks": scheduler.sort_by_time(),
+            "conflicts": scheduler.detect_conflicts(),
+        }
 
-        st.success("Schedule generated and sorted by time.")
-        st.table(tasks_to_table_rows(sorted_tasks, st.session_state["pets"]))
+if st.session_state.get("last_schedule"):
+    sched = st.session_state["last_schedule"]
+    st.success("Schedule generated and sorted by time.")
+    st.table(tasks_to_table_rows(sched["tasks"], st.session_state["pets"]))
+    if sched["conflicts"]:
+        st.warning(f"{len(sched['conflicts'])} potential scheduling conflict(s) detected.")
+        for conflict in sched["conflicts"]:
+            st.write(f"- {conflict}")
+    else:
+        st.success("No conflicts detected. Your pet care timeline looks clear.")
 
-        if conflicts:
-            st.warning(f"{len(conflicts)} potential scheduling conflict(s) detected.")
-            for conflict in conflicts:
-                st.write(f"- {conflict}")
-            st.info(
-                "Helpful next step: adjust one of the conflicting tasks so feeding, medication, or walks do not overlap."
-            )
+st.divider()
+
+# ── AI Assistant ──────────────────────────────────────────────────────────────
+st.subheader("🤖 AI Assistant (RAG-Powered)")
+st.caption(
+    "Powered by Llama 3.1 (OpenRouter) + a curated pet care knowledge base."
+    "The AI retrieves relevant facts before generating any response."
+)
+
+# ── 1. Suggest tasks ──────────────────────────────────────────────────────────
+st.markdown("#### Suggest Care Tasks for a Pet")
+
+if owner.pet_ids:
+    ai_pet_map = {
+        st.session_state["pets"][pid].name: pid
+        for pid in owner.pet_ids
+        if pid in st.session_state["pets"]
+    }
+    selected_for_suggest = st.selectbox(
+        "Select pet for task suggestions", list(ai_pet_map.keys()), key="ai_suggest_pet"
+    )
+
+    if st.button("Suggest tasks with AI"):
+        pet = st.session_state["pets"][ai_pet_map[selected_for_suggest]]
+        with st.spinner("Retrieving care facts and generating suggestions…"):
+            result = suggest_tasks(pet)
+
+        if result.get("tasks"):
+            confidence = result.get("confidence", 0)
+            st.success(f"Suggestions ready — confidence: {confidence:.0%}")
+            st.info(f"**Reasoning:** {result.get('reasoning', '')}")
+
+            if "pending_suggestions" not in st.session_state:
+                st.session_state["pending_suggestions"] = []
+            st.session_state["pending_suggestions"] = [
+                (t, ai_pet_map[selected_for_suggest]) for t in result["tasks"]
+            ]
         else:
-            st.success("No conflicts detected. Your pet care timeline looks clear.")
+            st.error(f"Could not generate suggestions. {result.get('reasoning', '')}")
+
+    if st.session_state.get("pending_suggestions"):
+        st.markdown("**Click a task to add it:**")
+        for i, (task_data, pid) in enumerate(st.session_state["pending_suggestions"]):
+            col_a, col_b = st.columns([5, 1])
+            with col_a:
+                st.write(
+                    f"• **{task_data['description']}** — {task_data['time']} ({task_data.get('frequency', 'Daily')})"
+                )
+            with col_b:
+                already_added = any(
+                    t.description == task_data["description"]
+                    for t in st.session_state.tasks
+                )
+                if already_added:
+                    st.caption("✓ Added")
+                elif st.button("Add", key=f"add_sug_{i}"):
+                    st.session_state.tasks.append(
+                        Task(
+                            task_id=st.session_state.next_task_id,
+                            description=task_data["description"],
+                            time=task_data["time"],
+                            frequency=task_data.get("frequency", "Daily"),
+                            date=date_today.today().isoformat(),
+                            status="incomplete",
+                            assigned_pet_id=pid,
+                        )
+                    )
+                    st.session_state.next_task_id += 1
+                    st.rerun()
+else:
+    st.info("Add a pet first to get AI task suggestions.")
+
+st.markdown("---")
+
+# ── 2. Pet care Q&A ───────────────────────────────────────────────────────────
+st.markdown("#### Ask a Pet Care Question")
+
+question = st.text_input(
+    "Your question",
+    placeholder="How often should I bathe a Golden Retriever?",
+    key="qa_question",
+)
+
+qa_pet_names = ["No specific pet"] + [
+    st.session_state["pets"][pid].name
+    for pid in owner.pet_ids
+    if pid in st.session_state["pets"]
+]
+qa_pet_choice = st.selectbox("Context pet (optional)", qa_pet_names, key="qa_pet")
+
+if st.button("Ask AI") and question.strip():
+    pet_for_qa = None
+    if qa_pet_choice != "No specific pet":
+        pet_for_qa = next(
+            (
+                st.session_state["pets"][pid]
+                for pid in owner.pet_ids
+                if st.session_state["pets"].get(pid)
+                and st.session_state["pets"][pid].name == qa_pet_choice
+            ),
+            None,
+        )
+
+    with st.spinner("Looking up answer in knowledge base…"):
+        result = answer_question(question, pet_for_qa)
+
+    st.info(result.get("answer", "No answer generated."))
+    sources = ", ".join(result.get("sources_used", ["General knowledge"]))
+    st.caption(f"Confidence: {result.get('confidence', 0):.0%} | Sources: {sources}")
+
+st.markdown("---")
+
+# ── 3. Weekly schedule ────────────────────────────────────────────────────────
+st.markdown("#### Generate AI Weekly Schedule")
+st.caption("The AI will create a personalised 7-day care plan for all your pets and explain its reasoning.")
+
+if st.button("Generate AI Weekly Schedule"):
+    pets_list = [
+        st.session_state["pets"][pid]
+        for pid in owner.pet_ids
+        if pid in st.session_state["pets"]
+    ]
+    if not pets_list:
+        st.warning("Add at least one pet first.")
+    else:
+        with st.spinner("Building your personalised weekly schedule…"):
+            result = generate_weekly_schedule(pets_list)
+
+        if result.get("schedule"):
+            confidence = result.get("confidence", 0)
+            st.success(f"Weekly schedule ready — confidence: {confidence:.0%}")
+            st.info(f"**Reasoning:** {result.get('reasoning', '')}")
+
+            for day_data in result["schedule"]:
+                with st.expander(_fmt_day_label(day_data.get("day", "Day"))):
+                    for t in day_data.get("tasks", []):
+                        st.write(
+                            f"• **[{t.get('pet_name', '?')}]** {t['description']} — {t['time']}"
+                        )
+        else:
+            st.error(f"Could not generate schedule. {result.get('reasoning', '')}")

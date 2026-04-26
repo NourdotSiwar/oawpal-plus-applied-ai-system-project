@@ -1,0 +1,164 @@
+{
+  "chunks": [
+    {
+      "id": "dog_general",
+      "tags": ["dog", "dogs", "canine", "general", "care", "daily", "routine"],
+      "content": "Dogs require daily feeding (2 meals per day for adults), fresh water always available, daily exercise (30-60 minutes minimum), annual vet checkups, core vaccinations (rabies, DHPP every 1-3 years), monthly flea and tick prevention, and monthly heartworm prevention. Dental brushing 2-3 times per week reduces periodontal disease. Always clean up waste immediately after walks."
+    },
+    {
+      "id": "cat_general",
+      "tags": ["cat", "cats", "feline", "general", "care", "daily", "routine"],
+      "content": "Cats need feeding 2 times per day (wet or dry food), fresh water daily (many cats prefer running water fountains), a clean litter box (scoop daily, full change weekly), annual vet checkups, core vaccinations (FVRCP annually, rabies), indoor enrichment toys and scratching posts. Cats groom themselves but benefit from weekly brushing to reduce shedding and hairballs."
+    },
+    {
+      "id": "puppy_care",
+      "tags": ["puppy", "puppies", "young", "junior", "dog", "baby", "under 2", "new"],
+      "content": "Puppies under 1 year need 3-4 small meals per day of puppy-specific food, socialization with people and other animals daily, basic obedience training sessions of 5-10 minutes multiple times daily, puppy vaccine series (every 3-4 weeks until 16 weeks old), deworming, and more frequent vet visits. House training requires consistent bathroom breaks every 2 hours. Puppies need extra sleep (16-18 hours per day)."
+    },
+    {
+      "id": "kitten_care",
+      "tags": ["kitten", "kittens", "young", "junior", "cat", "baby", "under 2", "new"],
+      "content": "Kittens under 1 year need 3-4 small meals per day of kitten-specific food high in protein and fat, 3 play sessions daily using wand toys or balls, kitten vaccine series (every 3-4 weeks until 16 weeks), litter box training, and safe indoor exploration. Spaying or neutering is recommended at 4-6 months. Kittens need 16-20 hours of sleep per day."
+    },
+    {
+      "id": "senior_dog",
+      "tags": ["senior", "elderly", "old", "aging", "dog", "older", "geriatric", "mature"],
+      "content": "Senior dogs 7 years and older need vet checkups every 6 months, joint supplements such as glucosamine and fish oil, lower-impact exercise like gentle walks instead of running, soft orthopedic bedding for joint comfort, more frequent dental cleanings, monitoring for weight changes, annual bloodwork to check organ function, and possible dietary switch to senior dog food with joint support."
+    },
+    {
+      "id": "senior_cat",
+      "tags": ["senior", "elderly", "old", "aging", "cat", "older", "geriatric", "mature"],
+      "content": "Senior cats 10 years and older need vet checkups every 6 months, kidney-supporting diet with moderate protein, raised food bowls for comfort, easy-access litter box with low sides, regular grooming assistance as self-grooming decreases, monitoring for weight loss or gain, annual thyroid and kidney disease screening, and dental care as dental disease is very common in older cats."
+    },
+    {
+      "id": "dog_labrador",
+      "tags": ["labrador", "lab", "retriever", "labrador retriever", "dog", "breed"],
+      "content": "Labradors are high-energy dogs needing 1-2 hours of vigorous exercise daily including running, swimming, or fetch games. They are highly prone to obesity so strict portion control is essential: feed 2-3 cups of premium dog food split into 2 meals. Weekly brushing during shedding season, monthly otherwise. Hip dysplasia and elbow dysplasia screenings recommended annually. Labs love water activities and retrieving games for mental stimulation."
+    },
+    {
+      "id": "dog_golden_retriever",
+      "tags": ["golden", "retriever", "golden retriever", "dog", "breed"],
+      "content": "Golden Retrievers need 1-2 hours of daily exercise, daily brushing to manage heavy shedding coat, monthly baths, and regular ear cleaning weekly to prevent infections. Prone to cancer, hip dysplasia, and obesity. Feed 2.5-3 cups high-quality food split into 2 meals. Professional grooming every 6-8 weeks. Annual cancer screenings recommended for older Golden Retrievers."
+    },
+    {
+      "id": "dog_german_shepherd",
+      "tags": ["german", "shepherd", "gsd", "alsatian", "german shepherd", "dog", "breed"],
+      "content": "German Shepherds require 2 hours of exercise daily including mental challenges such as obedience and agility. Daily brushing (they are heavy shedders), monthly baths, weekly ear cleaning, and regular nail trims every 4 weeks. Prone to hip and elbow dysplasia. Feed 3-3.5 cups high-protein food in 2 meals. Need consistent training and mental stimulation to prevent anxiety and destructive behaviors."
+    },
+    {
+      "id": "dog_poodle",
+      "tags": ["poodle", "toy poodle", "miniature poodle", "standard poodle", "dog", "breed"],
+      "content": "Poodles need daily exercise of 30-60 minutes, professional grooming every 4-6 weeks as their curly coat grows continuously and mats easily, daily brushing to prevent tangles, monthly nail trims, and ear cleaning weekly. They are highly intelligent and need daily mental stimulation through training and puzzle toys. Feed by size: toy poodle 1/4-1/2 cup per day, miniature 3/4-1 cup, standard 1.5-2.5 cups split into 2 meals."
+    },
+    {
+      "id": "dog_bulldog",
+      "tags": ["bulldog", "english bulldog", "french bulldog", "dog", "breed", "brachycephalic", "flat face"],
+      "content": "Bulldogs are brachycephalic (flat-faced) and must avoid overheating. Limit exercise to short 20-30 minute walks twice daily and avoid exercise in hot or humid weather. Clean facial wrinkles daily with a damp cloth or pet wipe to prevent skin infections. Weekly ear cleaning, monthly nail trims, dental brushing 3 times per week. Feed 1.5-2 cups split into 2 meals. Always keep cool in summer with air conditioning."
+    },
+    {
+      "id": "dog_beagle",
+      "tags": ["beagle", "dog", "breed", "hound", "scent"],
+      "content": "Beagles need 1 hour of exercise daily, weekly brushing, monthly baths, and regular ear cleaning weekly as floppy ears trap moisture and cause infections. They are scent hounds that will follow interesting smells, so always use a leash outdoors and ensure a secure yard. Prone to obesity so measure food carefully: 3/4-1.5 cups per day in 2 meals. Regular dental care important as Beagles are prone to gum disease."
+    },
+    {
+      "id": "dog_chihuahua",
+      "tags": ["chihuahua", "chi", "dog", "breed", "small", "toy", "tiny"],
+      "content": "Chihuahuas need 30 minutes of daily exercise, dental brushing daily as they are highly prone to dental disease, weekly nail trims since small nails grow fast, monthly baths, and warmth in cold weather since they get cold easily and may need sweaters. Feed 1/4-3/4 cup high-quality small-breed food per day in 2 meals. Despite small size, they need socialization from puppyhood to prevent fearfulness and aggression."
+    },
+    {
+      "id": "dog_husky",
+      "tags": ["husky", "siberian husky", "malamute", "dog", "breed", "working", "sled"],
+      "content": "Huskies need 2 or more hours of vigorous exercise daily as they were bred to run long distances. Heavy shedding twice yearly needs daily brushing during shedding season, otherwise weekly. Never shave a Husky's double coat as it protects from both cold and heat. They are prone to escaping so a secure yard is essential. Feed 2-3 cups quality food in 2 meals. Mental stimulation is critical; bored Huskies become destructive and vocal."
+    },
+    {
+      "id": "dog_dachshund",
+      "tags": ["dachshund", "dachshunds", "wiener", "sausage dog", "dog", "breed", "long"],
+      "content": "Dachshunds need 30-60 minutes of moderate daily exercise. Avoid allowing high jumps or stair climbing to protect their long spine from intervertebral disk disease (IVDD). Use ramps to help them access furniture. Weekly brushing for smooth coats, daily for long-haired varieties. Monthly nail trims essential. Feed 3/4-1 cup per day in 2 meals; obesity significantly worsens back problems. Regular ear cleaning for floppy ears."
+    },
+    {
+      "id": "dog_border_collie",
+      "tags": ["border collie", "collie", "dog", "breed", "herding", "working", "intelligent"],
+      "content": "Border Collies are the most intelligent dog breed and need 2 or more hours of intense exercise AND mental stimulation daily. Weekly brushing, monthly baths. They thrive with agility training, herding activities, or advanced obedience. Without sufficient stimulation, they develop compulsive and neurotic behaviors. Feed 1.5-2 cups premium food in 2 meals. They absolutely need a job or sport to stay mentally healthy and happy."
+    },
+    {
+      "id": "dog_shih_tzu",
+      "tags": ["shih tzu", "shih", "tzu", "dog", "breed", "small", "toy"],
+      "content": "Shih Tzus need 30 minutes of daily exercise, daily brushing of their long flowing coat to prevent mats, professional grooming every 6-8 weeks or keep in a short puppy cut, weekly ear cleaning, monthly nail trims, and daily facial cleaning around eyes to prevent staining. Feed 1/2-1 cup small-breed food in 2 meals. They are prone to breathing problems in heat due to flat face. Dental care is critical as small breeds get dental disease easily."
+    },
+    {
+      "id": "cat_persian",
+      "tags": ["persian", "cat", "breed", "long hair", "longhair", "flat face"],
+      "content": "Persian cats have long thick coats requiring daily brushing and combing to prevent painful mats and tangles. Professional grooming every 6-8 weeks or keep in a lion cut. Their flat faces need daily cleaning of eye discharge with a soft damp cloth. Weekly ear cleaning, monthly nail trims. Feed 1/3-1/2 cup dry food twice daily. Indoor-only cats. Prone to polycystic kidney disease so annual kidney screenings are important."
+    },
+    {
+      "id": "cat_siamese",
+      "tags": ["siamese", "cat", "breed", "vocal", "social"],
+      "content": "Siamese cats are very vocal and social and need daily interaction and at least 2 play sessions daily to stay mentally healthy. Weekly brushing of their short coat, monthly nail trims, and weekly ear cleaning. Feed 1/3-1/2 cup premium cat food twice daily. They are prone to respiratory issues and dental disease. Interactive puzzle feeders help meet their high intelligence needs. They do poorly when left alone for long periods."
+    },
+    {
+      "id": "cat_maine_coon",
+      "tags": ["maine coon", "maine", "coon", "cat", "breed", "large", "big"],
+      "content": "Maine Coons are large cats up to 18 pounds with semi-long coats needing brushing 2-3 times per week, more during shedding season. Feed 1/2-3/4 cup premium food twice daily adjusted for their large size. They are playful and dog-like, needing daily interactive play sessions. Weekly ear cleaning, monthly nail trims. Prone to hypertrophic cardiomyopathy so annual cardiac screenings are recommended."
+    },
+    {
+      "id": "cat_ragdoll",
+      "tags": ["ragdoll", "cat", "breed", "gentle", "large", "floppy"],
+      "content": "Ragdolls are large gentle cats needing brushing 2-3 times per week for their semi-long silky coat. They are strict indoor cats and should never roam outdoors. Daily interactive play sessions, weekly ear cleaning, monthly nail trims. Feed 1/2-3/4 cup high-quality food twice daily. They go limp when held which is normal. Prone to hypertrophic cardiomyopathy and bladder stones so regular vet checkups are essential."
+    },
+    {
+      "id": "cat_bengal",
+      "tags": ["bengal", "cat", "breed", "active", "wild", "spotted"],
+      "content": "Bengal cats are highly active and need 2-3 interactive play sessions daily with wand toys, balls, or puzzle feeders. Weekly brushing of their short spotted coat, monthly nail trims, weekly ear cleaning. They love water and climbing. Feed 1/3-1/2 cup high-protein diet twice daily. Without significant stimulation they become destructive. Leash training is possible for outdoor exploration if kept safe."
+    },
+    {
+      "id": "rabbit_care",
+      "tags": ["rabbit", "bunny", "rabbits", "bunnies", "other", "hay", "pellets"],
+      "content": "Rabbits need unlimited fresh timothy hay available at all times, fresh leafy greens daily (romaine, kale, cilantro), limited pellets of 1/4 cup per 5 pounds of body weight, and fresh water. They require at least 3 hours of supervised exercise outside their enclosure daily. Weekly brushing especially during shedding, monthly nail trims, annual checkups with a rabbit-savvy vet. Litter box should be cleaned daily. Spaying or neutering reduces cancer risk significantly."
+    },
+    {
+      "id": "bird_care",
+      "tags": ["bird", "parrot", "parakeet", "budgie", "cockatiel", "birds", "other", "avian"],
+      "content": "Birds need fresh food daily including pellets plus fresh fruits and vegetables, fresh water changed daily, cage cleaning weekly with full disinfection monthly. Daily interaction and out-of-cage time of 1-3 hours minimum. Foraging toys rotated weekly for mental stimulation. Annual avian vet checkups. No scented candles, non-stick cookware fumes, air fresheners, or cigarette smoke near birds as these are toxic. Misting or birdbath 2-3 times per week for feather health."
+    },
+    {
+      "id": "feeding_schedule",
+      "tags": ["feeding", "food", "meals", "eat", "diet", "nutrition", "schedule", "times"],
+      "content": "Adult dogs: 2 meals per day, morning and evening around 7am and 6pm. Adult cats: 2-3 meals per day. Puppies under 6 months: 3-4 meals per day. Kittens under 6 months: 3-4 meals per day. Senior pets 7 years and older: may benefit from more frequent smaller meals. Always provide fresh water refilled twice daily. Measure portions by cup or weight to prevent obesity. Treats should not exceed 10 percent of daily calorie intake."
+    },
+    {
+      "id": "exercise_needs",
+      "tags": ["exercise", "walk", "run", "play", "activity", "movement", "outdoor", "energy"],
+      "content": "Dog exercise by size: Small breeds (Chihuahua, Shih Tzu) need 20-30 minutes daily. Medium breeds (Beagle, Dachshund) need 45-60 minutes daily. Large and working breeds (Labrador, Husky, Border Collie) need 1-2 or more hours daily. Cats need 15-20 minutes of active play 2-3 times daily using wand toys or laser pointers. Senior pets need shorter gentler sessions. Morning walks provide mental stimulation from scents. Always bring water for walks over 20 minutes."
+    },
+    {
+      "id": "grooming_tasks",
+      "tags": ["grooming", "brush", "bath", "coat", "fur", "nails", "trim", "groom", "clean"],
+      "content": "Short-coated dogs: brush weekly, bathe monthly. Long-coated dogs: brush daily, bathe every 2-4 weeks. All dogs: nail trim every 3-4 weeks, ear cleaning weekly for floppy-eared breeds, dental brushing 3 times per week. Short-haired cats: brush weekly. Long-haired cats: brush daily or every other day. All cats: nail trim every 2-3 weeks, ear check weekly. Never use human shampoo on pets as the pH is wrong and will damage their skin."
+    },
+    {
+      "id": "vet_care",
+      "tags": ["vet", "veterinary", "vaccination", "checkup", "health", "doctor", "appointment", "shots", "annual"],
+      "content": "Dogs: Annual wellness exam, rabies vaccine (1 or 3-year schedule), DHPP (distemper, hepatitis, parvovirus, parainfluenza) every 1-3 years, bordetella annually if socializing. Cats: Annual wellness exam, rabies vaccine, FVRCP (feline viral rhinotracheitis, calicivirus, panleukopenia) every 1-3 years. All pets: monthly heartworm prevention medication, monthly flea and tick prevention applied on the same date each month. Senior pets 7 and older: exam every 6 months."
+    },
+    {
+      "id": "dental_care",
+      "tags": ["dental", "teeth", "tooth", "brush", "oral", "mouth", "gum", "hygiene"],
+      "content": "Dogs and cats should have teeth brushed at least 3 times per week using pet-specific enzymatic toothpaste. Never use human toothpaste as xylitol and fluoride are toxic to pets. Dental chews approved by the Veterinary Oral Health Council help reduce tartar between brushings. Professional dental cleaning under anesthesia is recommended annually or as directed by your vet. Warning signs of dental disease: bad breath, red or swollen gums, yellow or brown tartar, difficulty eating. Small breeds are most prone."
+    },
+    {
+      "id": "mental_enrichment",
+      "tags": ["enrichment", "mental", "stimulation", "puzzle", "training", "toys", "boredom", "play", "games"],
+      "content": "Dogs: 5-10 minute training sessions twice daily, puzzle feeders for meals, sniff walks where the dog leads and smells everything, rotating toy selection weekly. Cats: window perches with a view of birds, puzzle feeders, hiding kibble around the house for foraging, wand toy play 2-3 times daily. All pets benefit from novelty so rotate toys weekly. Bored pets develop anxiety, destructive behaviors, excessive vocalization, and depression. Daily enrichment is as important as physical exercise."
+    },
+    {
+      "id": "medication_reminders",
+      "tags": ["medication", "medicine", "drug", "pill", "treatment", "prescription", "reminder"],
+      "content": "Set consistent daily reminders for all pet medications. Never skip doses without vet approval. Store medications properly in a cool dry place unless refrigeration is required. Heartworm prevention: give on the same day each month. Flea and tick prevention: apply on the same date monthly. Keep a medication log noting the date given and any reactions observed. Alert your vet immediately if your pet refuses medication or shows side effects such as vomiting, lethargy, or unusual behavior."
+    },
+    {
+      "id": "weekly_schedule_template",
+      "tags": ["weekly", "schedule", "plan", "week", "routine", "template", "daily"],
+      "content": "A complete weekly pet care routine: Every day: feeding twice at consistent times, fresh water, exercise or play, litter or waste cleanup, brief health observation. Every week: full brushing and grooming session, ear check and cleaning, weight check, toy rotation, nail inspection. Every month: nail trim, flea and tick prevention, heartworm pill, bath for dogs. Every year: vet checkup, vaccinations, dental cleaning. Spread grooming tasks across different days to avoid overload. Morning is best for feeding plus exercise. Evening is best for second feeding and calm play or enrichment."
+    }
+  ]
+}

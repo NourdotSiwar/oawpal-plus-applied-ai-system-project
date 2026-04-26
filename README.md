@@ -1,71 +1,161 @@
-# PawPal+ (Module 2 Project)
+# PawPal+ AI Assistant
 
-You are building **PawPal+**, a Streamlit app that helps a pet owner plan care tasks for their pet.
+## Original Project
 
-## Scenario
+**PawPal+** (Module 2) was a Python/Streamlit pet care scheduling application that let a busy pet owner manage daily care tasks for one or more pets. It supported task creation with time, frequency, and pet assignment, chronological schedule generation, conflict detection, recurring task automation, and filtering by status or pet name.
 
-A busy pet owner needs help staying consistent with pet care. They want an assistant that can:
+---
 
-- Track pet care tasks (walks, feeding, meds, enrichment, grooming, etc.)
-- Consider constraints (time available, priority, owner preferences)
-- Produce a daily plan and explain why it chose that plan
+## Title and Summary
 
-Your job is to design the system first (UML), then implement the logic in Python, then connect it to the Streamlit UI.
+**PawPal+ AI Assistant** is an AI-enhanced pet care planning tool that combines the original scheduling system with a RAG-powered AI layer. Owners can get personalised care task suggestions for each pet, ask any pet care question and receive answers grounded in a curated knowledge base, and generate a full 7-day care schedule — all powered by `inclusionai/ling-2.6-flash` via OpenRouter. This project matters as it eases the burden and pain while smoothing out the journey of being a pet owner.
 
-## What you will build
+---
 
-Your final app should:
+## Architecture Overview
 
-- Let a user enter basic owner + pet info
-- Let a user add/edit tasks (duration + priority at minimum)
-- Generate a daily schedule/plan based on constraints and priorities
-- Display the plan clearly (and ideally explain the reasoning)
-- Include tests for the most important scheduling behaviors
+```mermaid
+flowchart TD
+    User([Pet Owner]) -->|Pet info, questions, requests| UI[Streamlit UI\napp.py]
 
-## Getting started
+    UI -->|Pet profile| RAG[RAG Retriever\nrag_retriever.py]
+    KB[(Knowledge Base\nknowledge_base.json\n32 pet care chunks)] -->|Relevant facts| RAG
+    RAG -->|Top-K context chunks| AI[AI Assistant\nai_assistant.py\nling-2.6-flash via OpenRouter]
 
-### Setup
+    UI -->|Pet + task data| AI
+    AI -->|Suggested tasks\nQ&A answers\nWeekly schedule\n+ confidence score| UI
+    UI -->|Results displayed| User
+
+    AI -->|Logs every call\nwith confidence + errors| LOG[pawpal_ai.log]
+
+    TESTS[Test Suite\ntest_pawpal.py\ntest_ai_assistant.py] -->|Unit tests - no API key| RAG
+    TESTS -->|Mocked OpenRouter tests| AI
+    TESTS -->|Core logic tests| SCHED[Scheduler\npawpal_system.py]
+
+    style KB fill:#f0e6ff,stroke:#9b59b6
+    style LOG fill:#fef9e7,stroke:#f39c12
+    style TESTS fill:#eafaf1,stroke:#27ae60
+```
+
+**Component roles:**
+- **Knowledge Base** — 32 curated chunks covering species, common breeds, age groups, feeding, exercise, grooming, vet care, enrichment, and weekly scheduling.
+- **RAG Retriever** — keyword overlap scorer that matches query terms (expanded with pet species, breed, and age-group tags) to knowledge base chunks. No external embedding API needed.
+- **AI Assistant** — wraps `inclusionai/ling-2.6-flash` via OpenRouter. Each function retrieves relevant chunks first, then builds a structured prompt and requests JSON output with a confidence score.
+- **Streamlit UI** — three AI sections: task suggestions (with one-click add), pet care Q&A, and weekly schedule generation.
+- **Logging** — every AI call is logged to `pawpal_ai.log` with timestamp, pet info, chunk count, and confidence score.
+- **Test Suite** — 7 original core tests + 10 new AI-layer tests (retriever tests need no API key; assistant tests mock OpenRouter).
+
+**Data flow:** User input → RAG retrieval → OpenRouter prompt → JSON response → Streamlit display
+
+---
+
+## Setup Instructions
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/NourdotSiwar/oawpal-plus-applied-ai-system-project.git
+cd oawpal-plus-applied-ai-system-project
+```
+
+### 2. Create and activate a virtual environment
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+# Windows:
+.venv\Scripts\activate
+# Mac/Linux:
+source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
 ```
 
-### Suggested workflow
+### 4. Set up your OpenRouter API key
 
-1. Read the scenario carefully and identify requirements and edge cases.
-2. Draft a UML diagram (classes, attributes, methods, relationships).
-3. Convert UML into Python class stubs (no logic yet).
-4. Implement scheduling logic in small increments.
-5. Add tests to verify key behaviors.
-6. Connect your logic to the Streamlit UI in `app.py`.
-7. Refine UML so it matches what you actually built.
+Get a free API key at **openrouter.ai → Sign up → Keys**.
 
-## Features / Smarter Scheduling
+Create a `.env` file in the project root:
 
-- **Chronological Task Sorting:** Automatically orders care tasks by HH:MM time so owners can follow a clear daily timeline.
-- **Schedule Conflict Detection:** Flags overlapping tasks that share the same date and time to prevent care-task collisions.
-- **Task Status Filtering:** Filters tasks by status (`incomplete`, `complete`, `deleted`) so users can focus on what needs attention.
-- **Pet-Specific Task Filtering:** Filters schedule items by pet name to support multi-pet households.
-- **Recurring Task Continuation (Daily/Weekly):** When a recurring task is marked complete, the next occurrence is auto-created using date arithmetic.
-- **Owner-Pet-Task Aggregation:** Supports owner-level planning by collecting tasks across all pets tied to one owner.
-- **Clear UI Scheduling Feedback:** Uses Streamlit success and warning messages to communicate generated schedules and detected conflicts.
+```
+OPENROUTER_API_KEY=your_key_here
+```
 
-### Testing PawPal+
+### 5. Run the app
 
-The current 7-test suite checks core logic paths including task completion state changes, pet task assignment, chronological sorting, daily recurrence creation on completion, duplicate time conflict detection, empty-scheduler behavior, and non-conflict handling for same times on different dates.
+```bash
+streamlit run app.py
+```
 
-Command to run tests: python -m pytest
+### 6. Run the tests
 
-Confidence Level for system readability (based on 7/7 passing tests): ★★★★☆ (4/5)
+```bash
+python -m pytest
+```
 
-Reason:
+---
 
-- Passing tests give strong confidence that key behaviors are clear and consistently implemented.
-- The tests cover major happy paths and important edge cases.
-- Readability is high, but not a full 5/5 because it is always possible to test more. As mentioned by Dijkstra, tests only prove presence of bugs, not their absence.
+## Sample Interactions
 
-### 📸 Demo
+### Example 1 — AI Task Suggestions
 
-[![PawPal App](pawpal.png)](pawpal.png)
+**Input:** Owner adds a pet named "Bella" (dog, Golden Retriever, age 2), then clicks "Suggest tasks with AI".
+
+**AI Output (confidence: 92%):**
+- Morning walk — 07:30 (Daily)
+- Breakfast feeding — 08:00 (Daily)
+- Brushing session — 17:00 (Daily)
+- Evening walk — 18:00 (Daily)
+- Dental brushing — 20:00 (Daily)
+
+**Reasoning:** Golden Retrievers are high-energy dogs needing regular exercise and daily coat brushing. At age 2 they are still developing good habits, so consistent dental care is introduced early.
+
+---
+
+### Example 2 — Pet Care Q&A
+
+**Input:** "How often should I clean my cat's litter box?"
+
+**AI Output (confidence: 89%):**
+> Scoop the litter box at least once daily, ideally twice. Do a full litter replacement once per week. Cats are fastidious and will avoid a dirty litter box, which can lead to accidents and stress. Use an unscented clumping litter for most cats.
+
+**Sources:** General cat care guidelines, cat daily routine knowledge base entry.
+
+---
+
+### Example 3 — AI Weekly Schedule
+
+**Input:** Owner has two pets — "Max" (dog, Husky, age 4) and "Luna" (cat, Siamese, age 3). Clicks "Generate AI Weekly Schedule".
+
+**AI Output (confidence: 87%):**
+
+Monday–Sunday each includes:
+- Max: Morning run 07:00, Breakfast 08:00, Training session 17:00, Evening walk 19:00, Dinner 18:00
+- Luna: Breakfast 08:00, Playtime 10:00, Dinner 18:00, Evening play 20:00
+
+**Reasoning:** Huskies require intense daily exercise so two walks plus a training session are scheduled. Siamese cats need regular interactive play to prevent boredom. Tasks are staggered so the owner can give each pet individual attention.
+
+---
+
+## Demo Walkthrough
+
+[Watch the video walkthrough on Loom](https://www.loom.com/share/dc068eaa123d4f699e363ea1a1b351a2)
+
+The video demonstrates an end-to-end system run including AI task suggestions, pet care Q&A, and weekly schedule generation with confidence scores.
+
+---
+
+## Further Documentation
+
+See [model_card.md](model_card.md) for design decisions, testing results, limitations, ethical considerations, and AI collaboration reflections.
+
+### Portfolio Artifact
+
+[Link to Repository](https://github.com/NourdotSiwar/oawpal-plus-applied-ai-system-project)
+
+After doing this project with the assistance of Claude, I have found that our entire lives are being influenced largely by how AI works and functions. While I believe software engineers will not be replaced AI, I strongly find that AI will be extremely helpful with making us much more productive on the job. Instead of figuring out the syntax for a new language or understanding documentation, future engineers will focus more on business impact and design decisions.
+
+---
